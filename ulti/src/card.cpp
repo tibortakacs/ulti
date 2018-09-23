@@ -18,53 +18,20 @@
  *
  **********************************************************************************************************************/
 
-#include <vector>
+#include <ulti/card.hpp>
 
 namespace ulti
 {
-///
-/// \brief Hungarian card's suits.
-///
-enum class CardSuit
+
+Card::Card(const CardSuit& s, const CardRank& r)
+  : suit(s)
+  , rank(r)
 {
-    Heart = 0,
-    Bell,
-    Acorn,
-    Leave,
-    __Size
-};
+}
 
-///
-/// \brief Hungarian card's ranks.
-///
-enum class CardRank
+bool
+Card::operator==(const Card& other) const
 {
-    Seven = 0,
-    Eight,
-    Nine,
-    Ten,
-    UnderKnave,
-    OverKnave,
-    King,
-    Ace,
-    __Size
-};
-
-///
-/// \brief A class which represents a card of a pile.
-///
-struct Card final
-{
-    CardSuit suit;
-    CardRank rank;
-
-    Card(const CardSuit& s, const CardRank& r);
-    bool operator==(const Card& other) const;
-};
-
-///
-/// Represent a set of cards.
-///
-using Cards = std::vector<Card>;
-
+    return (suit == other.suit) && (rank == other.rank);
+}
 } // namespace ulti

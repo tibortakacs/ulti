@@ -18,53 +18,48 @@
  *
  **********************************************************************************************************************/
 
-#include <vector>
+#include "dealer.hpp"
+
+#include <algorithm>
 
 namespace ulti
 {
+constexpr int NUMBER_OF_PLAYER_CARDS = 10;
+
 ///
-/// \brief Hungarian card's suits.
+/// \brief Creates a new full deck. The deck is ordered.
+/// \return Full deck.
 ///
-enum class CardSuit
+Cards
+create_deck()
 {
-    Heart = 0,
-    Bell,
-    Acorn,
-    Leave,
-    __Size
-};
+    Cards deck;
+    deck.reserve(static_cast<int>(CardSuit::__Size) * static_cast<int>(CardRank::__Size));
 
-///
-/// \brief Hungarian card's ranks.
-///
-enum class CardRank
+    for (int suit = 0; suit < static_cast<int>(CardSuit::__Size); ++suit)
+    {
+        for (int rank = 0; rank < static_cast<int>(CardRank::__Size); ++rank)
+        {
+            deck.emplace_back(static_cast<CardSuit>(suit), static_cast<CardRank>(rank));
+        }
+    }
+
+    return deck;
+}
+
+Dealer::Result
+Dealer::shuffle_and_deal()
 {
-    Seven = 0,
-    Eight,
-    Nine,
-    Ten,
-    UnderKnave,
-    OverKnave,
-    King,
-    Ace,
-    __Size
-};
+    auto deck = create_deck();
 
-///
-/// \brief A class which represents a card of a pile.
-///
-struct Card final
-{
-    CardSuit suit;
-    CardRank rank;
+    std::random_shuffle(deck.begin(), deck.end());
 
-    Card(const CardSuit& s, const CardRank& r);
-    bool operator==(const Card& other) const;
-};
+    Result result{Cards(deck.begin(), deck.begin() + NUMBER_OF_PLAYER_CARDS),
+                  Cards(deck.begin() + NUMBER_OF_PLAYER_CARDS, deck.begin() + NUMBER_OF_PLAYER_CARDS * 2),
+                  Cards(deck.begin() + NUMBER_OF_PLAYER_CARDS * 2, deck.begin() + NUMBER_OF_PLAYER_CARDS * 3),
+                  Cards(deck.begin() + NUMBER_OF_PLAYER_CARDS * 3, deck.end())};
 
-///
-/// Represent a set of cards.
-///
-using Cards = std::vector<Card>;
+    return result;
+}
 
 } // namespace ulti

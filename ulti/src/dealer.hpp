@@ -18,53 +18,33 @@
  *
  **********************************************************************************************************************/
 
-#include <vector>
+#include <ulti/card.hpp>
 
 namespace ulti
 {
+
 ///
-/// \brief Hungarian card's suits.
+/// \brief Represents a dealer who randomly deals the cards for the 3 players.
 ///
-enum class CardSuit
+class Dealer
 {
-    Heart = 0,
-    Bell,
-    Acorn,
-    Leave,
-    __Size
+  public:
+    ///
+    /// \brief The result of the shuffling and dealing.
+    ///
+    struct Result
+    {
+        Cards cards_0; ///< 1st set of cards (10 cards)
+        Cards cards_1; ///< 2nd set of cards (10 cards)
+        Cards cards_2; ///< 3rd set of cards (10 cards)
+        Cards talon; ///< Talon cards (2 cards)
+    };
+
+    ///
+    /// \brief Shuffles the full deck and deals it for the three players.
+    /// \return Dealt set of cards.
+    ///
+    static Result shuffle_and_deal();
 };
-
-///
-/// \brief Hungarian card's ranks.
-///
-enum class CardRank
-{
-    Seven = 0,
-    Eight,
-    Nine,
-    Ten,
-    UnderKnave,
-    OverKnave,
-    King,
-    Ace,
-    __Size
-};
-
-///
-/// \brief A class which represents a card of a pile.
-///
-struct Card final
-{
-    CardSuit suit;
-    CardRank rank;
-
-    Card(const CardSuit& s, const CardRank& r);
-    bool operator==(const Card& other) const;
-};
-
-///
-/// Represent a set of cards.
-///
-using Cards = std::vector<Card>;
 
 } // namespace ulti
